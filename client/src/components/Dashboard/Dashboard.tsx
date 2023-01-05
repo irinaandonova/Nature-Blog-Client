@@ -5,7 +5,7 @@ import DestinationInterface from "../../interfaces/DestinationInterface";
 
 
 const Dashboard = () => {
-    const [destinations, setDestinations] = useState<DestinationInterface[] | undefined>([]);
+    const [destinations, setDestinations] = useState<DestinationInterface[]>([]);
 
     useEffect(() => {
         destinationServices.getDestinations()
