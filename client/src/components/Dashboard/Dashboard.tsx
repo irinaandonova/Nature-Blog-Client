@@ -5,19 +5,23 @@ import DestinationInterface from "../../interfaces/DestinationInterface";
 
 
 const Dashboard = () => {
-    const [destinations, setDestinations] = useState<DestinationInterface[]>([]);
-    
+    const [destinations, setDestinations] = useState<DestinationInterface[] | undefined>([]);
+
     useEffect(() => {
         destinationServices.getDestinations()
-            .then(res => {
-                setDestinations(res)
-            })
+            .then(res => setDestinations(res))
             .catch(err => console.log(err))
     });
 
     return (
         <section className="container-wrapper">
-            {destinations.map(d => <DestinationCard destination={d} />)}
+            {
+                destinations
+                    ?
+                    destinations.map(d => <DestinationCard destinationInfo={d} />)
+                    :
+                    null
+            }
         </section>
     )
 }
