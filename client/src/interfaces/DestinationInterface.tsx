@@ -3,7 +3,7 @@ interface DestinationInterface {
     name: string, 
     description: string,
     imageUrl: string,
-    regionName: string
+    regionId: number
 }
 
 export default DestinationInterface;
