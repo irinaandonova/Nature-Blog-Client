@@ -2,14 +2,21 @@ import RegionInterface from "../interfaces/RegionInterface";
 
 const baseUrl: string = 'https://localhost:7067/api/regions';
 
-const getRegion = async (id: string) => {
+const getRegion = async (id: number) => {
     try {
         const response: any = await fetch(`${baseUrl}/${id}`);
-        const result: RegionInterface = await response.json();
+        if (response.ok) {
+            const result: RegionInterface = await response.json();
+
+            return result;
+        }
+        else {
+            throw new Error('Exception in the get region method!');
+        }
     }
     catch (err) {
         console.log(err);
-        return err;
+        return null;
     }
 }
 const regionServices = {
