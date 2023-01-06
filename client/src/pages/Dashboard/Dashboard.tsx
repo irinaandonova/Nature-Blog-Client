@@ -4,13 +4,16 @@ import DestinationCard from "../DestinationCard/DestinationCard";
 import DestinationInterface from "../../interfaces/DestinationInterface";
 import DashboardInterface from "../../interfaces/DashboardInterface";
 
-const Dashboard:FC<DashboardInterface> = ({filter}) => {
+const Dashboard: FC<DashboardInterface> = ({ filter }) => {
     const [destinations, setDestinations] = useState<DestinationInterface[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        setLoading(true);
         destinationServices.getDestinations(filter)
             .then(res => setDestinations(res))
             .catch(err => console.log(err))
+            .finally(() => setLoading(false))
     });
 
     return (
