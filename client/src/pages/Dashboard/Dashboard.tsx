@@ -1,27 +1,25 @@
-import { useEffect, useState, FC } from "react";
-import destinationServices from "../../services/destinationServices";
+import { FC } from "react";
 import DestinationCard from "../DestinationCard/DestinationCard";
-import DestinationInterface from "../../interfaces/DestinationInterface";
 import DashboardInterface from "../../interfaces/DashboardInterface";
+import { useQuery } from "react-query";
+import axiosLocalInstance from "../../config/axiosConfig";
+import DestinationInterface from "../../interfaces/DestinationInterface";
 
-const Dashboard: FC<DashboardInterface> = ({ filter }) => {
-    const [destinations, setDestinations] = useState<DestinationInterface[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+const Dashboard: FC<DashboardInterface> = () => {
+    const getDestinations = async () => {
+        const response = await axiosLocalInstance.get('/destinations');
 
-    useEffect(() => {
-        setLoading(true);
-        destinationServices.getDestinations(filter)
-            .then(res => setDestinations(res))
-            .catch(err => console.log(err))
-            .finally(() => setLoading(false))
-    });
+        const data: DestinationInterface[] = response.data;
+        return data;
+    }
+    const { data, isError, isLoading, isFetching, refetch } = useQuery(['allDestinationsArray'], getDestinations)
 
     return (
         <section className="container-wrapper">
             {
-                destinations
+                data
                     ?
-                    destinations.map(d => <DestinationCard destinationInfo={d} />)
+                    data.map(d => <DestinationCard destinationInfo={d} />)
                     :
                     null
             }
