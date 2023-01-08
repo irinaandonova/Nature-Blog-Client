@@ -1,20 +1,23 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
+import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationInterface from "../../interfaces/DestinationInterface";
 import RegionInterface from "../../interfaces/RegionInterface";
-import regionServices from "../../services/regionServices";
+import { useQuery } from 'react-query';
 
 interface DestinationProps {
     destinationInfo: DestinationInterface
 }
 
 const DestinationCard: FC<DestinationProps> = ({ destinationInfo }) => {
-    const [region, setRegion] = useState<RegionInterface | null>(null);
+    const getRegion = async () => {
+        const id: number = destinationInfo.regionId;
+        const response = await axiosLocalInstance.get(`/region/${id}`);
 
-    useEffect(() => {
-        regionServices.getRegion(destinationInfo.regionId)
-            .then(result => setRegion(result))
-            .catch(err => console.log(err));
-    });
+        const data: RegionInterface = response.data;
+        return data;
+    }
+
+    const { data } = useQuery(['getRegionQueryKey'], getRegion, { retry: false });
 
     return (
         <article className="destination-wrapper">
@@ -23,7 +26,7 @@ const DestinationCard: FC<DestinationProps> = ({ destinationInfo }) => {
             </article>
             <article className="info-article">
                 <p className="info">Name: {destinationInfo.name}</p>
-                <p className="info">Region: {region?.name}</p>
+                <p className="info">Region: {data?.name}</p>
                 <p className="info">{destinationInfo.description}</p>
             </article>
         </article>
