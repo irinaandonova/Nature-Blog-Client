@@ -1,5 +1,5 @@
 interface DashboardInterface {
-    filter: string | null
+    filter: string | ''
 }
 
 export default DashboardInterface;
