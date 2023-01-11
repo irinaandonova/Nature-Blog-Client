@@ -1,0 +1,16 @@
+header {
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    background-color: rgb(235 240 241);
+    margin-bottom: 1rem;
+}
+
+.links {
+    text-decoration: none;
+    color: black;
+    padding: 10px 30px;
+    background-color: rgb(127 204 147);
+    border-radius: 20px;
+    margin: 10px;
+}
