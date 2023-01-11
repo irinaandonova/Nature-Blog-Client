@@ -3,6 +3,7 @@ import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationInterface from "../../interfaces/DestinationInterface";
 import RegionInterface from "../../interfaces/RegionInterface";
 import { useQuery } from 'react-query';
+import './destinationCard.css';
 
 interface DestinationProps {
     destinationInfo: DestinationInterface
@@ -11,18 +12,18 @@ interface DestinationProps {
 const DestinationCard: FC<DestinationProps> = ({ destinationInfo }) => {
     const getRegion = async () => {
         const id: number = destinationInfo.regionId;
-        const response = await axiosLocalInstance.get(`/region/${id}`);
+        const response = await axiosLocalInstance.get(`region/${id}`);
 
         const data: RegionInterface = response.data;
         return data;
     }
 
     const { data } = useQuery(['getRegionQueryKey'], getRegion, { retry: false });
-
+    
     return (
         <article className="destination-wrapper">
             <article className="image-article">
-                <img src="" alt="mountains" />
+                <img src={destinationInfo.imageUrl} alt="mountains" className="destination-image"/>
             </article>
             <article className="info-article">
                 <p className="info">Name: {destinationInfo.name}</p>
