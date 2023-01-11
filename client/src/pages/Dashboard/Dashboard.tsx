@@ -1,29 +1,58 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import DestinationCard from "../DestinationCard/DestinationCard";
 import DashboardInterface from "../../interfaces/DashboardInterface";
 import { useQuery } from "react-query";
 import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationInterface from "../../interfaces/DestinationInterface";
+import { Box, CircularProgress, Pagination } from "@mui/material";
+import { useParams } from "react-router-dom";
 
-const Dashboard: FC<DashboardInterface> = () => {
+const Dashboard: FC = () => {
+    const { destinationType } = useParams();
+    const [page, setPage] = useState<number>(1);
+    const [pageCount, setPageCount] = useState<number>(1);
+
+    useEffect(() => {
+        getPageCount()
+    },[]);
+    
     const getDestinations = async () => {
-        const response = await axiosLocalInstance.get('/destinations');
+        
+        if (destinationType) {
+            const response = await axiosLocalInstance.get(`destinations/${destinationType}/${page}`);
 
-        const data: DestinationInterface[] = response.data;
-        return data;
+            const data: DestinationInterface[] = response.data;
+            return data;
+        }
+        else {
+            const response = await axiosLocalInstance.get(`destinations`);
+
+            const data: DestinationInterface[] = response.data;
+            return data;
+        }
+
     }
-    const { data, isError, isLoading, isFetching, refetch } = useQuery(['allDestinationsArray'], getDestinations)
+    const getPageCount = async() => {
+        const response = await axiosLocalInstance.get(`destinations/count/all`);
+        const data: number = response.data;
+        setPageCount(data);
+        
+    }
+    const { data, isError, isLoading, isFetching } = useQuery(['allDestinationsArray', destinationType, page], getDestinations, { retry: false})
 
     return (
-        <section className="container-wrapper">
+        <Box>
+            {(isLoading || isFetching) ? <CircularProgress /> : null}
+            {isError ? <p>Something went wrong</p> : null}
             {
                 data
                     ?
-                    data.map(d => <DestinationCard destinationInfo={d} />)
+                    data.map(d => <DestinationCard destinationInfo={d} key={d.id} />)
                     :
                     null
             }
-        </section>
+            <Pagination count={pageCount} onChange={(event: React.ChangeEvent<unknown>, page: number) => setPage(page)} />
+        </Box>
     );
 }
 
