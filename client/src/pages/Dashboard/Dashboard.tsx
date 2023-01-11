@@ -15,17 +15,17 @@ const Dashboard: FC = () => {
     useEffect(() => {
         getPageCount()
     },[]);
-    
+
     const getDestinations = async () => {
         
         if (destinationType) {
-            const response = await axiosLocalInstance.get(`destinations/${destinationType}/${page}`);
+            const response = await axiosLocalInstance.get(`destinations/${destinationType}/page/${page}`);
 
             const data: DestinationInterface[] = response.data;
             return data;
         }
         else {
-            const response = await axiosLocalInstance.get(`destinations`);
+            const response = await axiosLocalInstance.get(`destinations/destination/${page}`);
 
             const data: DestinationInterface[] = response.data;
             return data;
@@ -35,8 +35,8 @@ const Dashboard: FC = () => {
     const getPageCount = async() => {
         const response = await axiosLocalInstance.get(`destinations/count/all`);
         const data: number = response.data;
-        setPageCount(data);
         
+        setPageCount(data);
     }
     const { data, isError, isLoading, isFetching } = useQuery(['allDestinationsArray', destinationType, page], getDestinations, { retry: false})
 
