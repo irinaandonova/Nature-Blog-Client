@@ -1,15 +1,15 @@
 import { useContext, useState, useEffect, FC } from "react";
 import { AuthContext } from "../../auth/authContext";
 import { Button, FormGroup, FormGroupProps } from "@mui/material";
-import HikingTrail from "../../components/HikingTrailInfo";
+import HikingTrail from "../../components/HikingTrail";
 import Seaside from "../../components/Seaside";
 import Park from "../../components/Park";
 import RegionInterface from "../../interfaces/RegionInterface";
 import { useQuery } from "react-query";
 import axiosLocalInstance from "../../config/axiosConfig";
 import { CircularProgress, FormControl, FormLabel, InputLabel, Input, Box, Radio, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { DestinationContext } from "../../context/destinationContext";
 import { useNavigate } from "react-router-dom";
+import CreateDestinationInterface from "../../interfaces/CreateDestinationInterface";
 
 interface AllInfoInterface {
     name: string,
@@ -18,23 +18,28 @@ interface AllInfoInterface {
     imageUrl: string,
     destinationType: string
 }
-const toggleType = (type: string) => {
-    if (type == 'hiking-trail')
-        return <HikingTrail />
-    else if (type == 'seaside')
-        return <Seaside />
-    else if (type == 'park')
-        return <Park />
-    else
-        return null;
-}
+
 
 const CreateDestination = () => {
+    const initialState = { duration: undefined, difficulty: undefined, isGuarded: undefined, offersUmbrella: undefined, isDogFriendly: undefined, hasPlayground: undefined }
     const [destinationType, setDestinationType] = useState<string>('');
     const { user } = useContext(AuthContext);
-    const { hikingTrailinfo } = useContext(DestinationContext);
+    const [info, setInfo] = useState<CreateDestinationInterface>(initialState);
     const navigate = useNavigate();
 
+    const addInfo = (info: CreateDestinationInterface) => {
+        setInfo(info)
+    }
+    const toggleType = (type: string) => {
+        if (type == 'hiking-trail')
+            return <HikingTrail addInfo={addInfo} />
+        else if (type == 'seaside')
+            return <Seaside addInfo={addInfo} />
+        else if (type == 'park')
+            return <Park addInfo={addInfo} />
+        else
+            return null;
+    }
     const getRegions = async () => {
         const regions = await axiosLocalInstance.get('region');
         const data: RegionInterface[] = regions.data;
@@ -48,29 +53,50 @@ const CreateDestination = () => {
         description: string,
         imageUrl: string,
         destinationType: string) => {
-        
+
         if (destinationType == 'hiking-trail') {
-            const response = await axiosLocalInstance.post('destinations', {
+            const response = await axiosLocalInstance.post('destinations/hiking-trail', {
                 name,
                 regionId: region,
+                creatorId: user.id,
                 description,
                 imageUrl,
-                duration: hikingTrailinfo.duration,
-                difficulty: hikingTrailinfo.difficulty,
-                creatorId: user.id,
-                isDogFriendly: null,
-                hasPlayground: null,
-                isGuarded: null,
-                hasUmbrella: null
+                duration: info.duration,
+                difficulty: info.difficulty,
             });
             
             if (response.status == 200)
                 navigate('/');
         }
-
+        else if (destinationType === 'park') {
+            const response = await axiosLocalInstance.post('destinations/park', {
+                name,
+                regionId: region,
+                creatorId: user.id,
+                description,
+                imageUrl,
+                isDogFriendly: info.isDogFriendly,
+                hasPlayground: info.hasPlayground,
+            });
+            
+            if (response.status == 200)
+                navigate('/');
+        }
+        else if( destinationType == 'seaside') {
+            const response = await axiosLocalInstance.post('destinations/seaside', {
+                name,
+                regionId: region,
+                creatorId: user.id,
+                description,
+                imageUrl,
+                offersUmbrella: info.offersUmbrella,
+                isGuarded: info.isGuarded
+            });
+            
+            if (response.status == 200)
+                navigate('/');
+        }
     }
-
-
     return (
         <Box>
             {(isLoading || isFetching) ? <CircularProgress /> : null}
