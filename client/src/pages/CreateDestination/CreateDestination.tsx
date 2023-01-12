@@ -1,25 +1,16 @@
 import { useContext, useState, useEffect, FC } from "react";
 import { AuthContext } from "../../auth/authContext";
-import { Button, FormGroup, FormGroupProps } from "@mui/material";
+import { Button, FormGroup, FormGroupProps, Grid, TextField } from "@mui/material";
 import HikingTrail from "../../components/HikingTrail";
 import Seaside from "../../components/Seaside";
 import Park from "../../components/Park";
 import RegionInterface from "../../interfaces/RegionInterface";
 import { useQuery } from "react-query";
 import axiosLocalInstance from "../../config/axiosConfig";
-import { CircularProgress, FormControl, FormLabel, InputLabel, Input, Box, Radio, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { CircularProgress, FormControl, FormLabel, InputLabel, Input, Box, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CreateDestinationInterface from "../../interfaces/CreateDestinationInterface";
-
-interface AllInfoInterface {
-    name: string,
-    region: number,
-    description: string,
-    imageUrl: string,
-    destinationType: string
-}
-
-
+import './style.css';
 const CreateDestination = () => {
     const initialState = { duration: undefined, difficulty: undefined, isGuarded: undefined, offersUmbrella: undefined, isDogFriendly: undefined, hasPlayground: undefined }
     const [destinationType, setDestinationType] = useState<string>('');
@@ -64,7 +55,7 @@ const CreateDestination = () => {
                 duration: info.duration,
                 difficulty: info.difficulty,
             });
-            
+
             if (response.status == 200)
                 navigate('/');
         }
@@ -78,11 +69,11 @@ const CreateDestination = () => {
                 isDogFriendly: info.isDogFriendly,
                 hasPlayground: info.hasPlayground,
             });
-            
+
             if (response.status == 200)
                 navigate('/');
         }
-        else if( destinationType == 'seaside') {
+        else if (destinationType == 'seaside') {
             const response = await axiosLocalInstance.post('destinations/seaside', {
                 name,
                 regionId: region,
@@ -92,7 +83,7 @@ const CreateDestination = () => {
                 offersUmbrella: info.offersUmbrella,
                 isGuarded: info.isGuarded
             });
-            
+
             if (response.status == 200)
                 navigate('/');
         }
@@ -101,74 +92,79 @@ const CreateDestination = () => {
         <Box>
             {(isLoading || isFetching) ? <CircularProgress /> : null}
             {isError ? <p>Something went wrong</p> : null}
-            <FormGroup>
-                <form onSubmit={(e: React.SyntheticEvent) => {
-                    e.preventDefault();
-                    const target = e.target as typeof e.target & {
-                        name: { value: string }
-                        region: { value: number }
-                        description: { value: string }
-                        imageUrl: { value: string },
-                    };
-                    const name = target.name.value;
-                    const region = target.region.value;
-                    const description = target.description.value;
-                    const imageUrl = target.imageUrl.value;
+            <form className="form" onSubmit={(e: React.SyntheticEvent) => {
+                e.preventDefault();
+                const target = e.target as typeof e.target & {
+                    name: { value: string }
+                    region: { value: number }
+                    description: { value: string }
+                    imageUrl: { value: string },
+                };
+                const name = target.name.value;
+                const region = target.region.value;
+                const description = target.description.value;
+                const imageUrl = target.imageUrl.value;
 
-                    createDestinationHandler(name,
-                        region,
-                        description,
-                        imageUrl,
-                        destinationType)
-                }}>
-                    <FormLabel>Create Destination </FormLabel>
-                    <FormControl>
-                        <InputLabel htmlFor="name">Destination Name: </InputLabel>
-                        <Input name="name" />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel htmlFor="region">Region: </InputLabel>
-                        <Select
-                            name="region"
-                            //value={age}
-                            label="region"
-                        //onChange={handleChange}
-                        >
+                createDestinationHandler(name,
+                    region,
+                    description,
+                    imageUrl,
+                    destinationType)
+            }}>
+                <Grid container direction="column" className="container">
+                    <Grid item>
+                        <TextField label="Destination name" margin="normal" type="text" inputProps={{ minLength: 2, maxLength: 100 }} />
+                    </Grid>
+                    <Grid item>
+                        <FormControl margin="normal">
+                            <InputLabel htmlFor="region" >Region: </InputLabel>
+                            <Select
+                                name="region"
+                                autoWidth
+                                label="region"
+                                className="region-select"
+                                margin="dense"
+                            >
+                                {
+                                    data
+                                        ?
+                                        data.map(r => <MenuItem value={r.id}>{r.name}</MenuItem>)
+                                        :
+                                        null
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <TextField type="text" label="Description" margin="normal" inputProps={{ minLength: 2, maxLength: 960,  }} />
+                    </Grid>
+                    <Grid item>
+                        <FormControl>
+                            <TextField type="text" label="Image path" margin="normal" inputProps={{ minLength: 2, maxLength: 960 }} />
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <FormControl margin="normal">
+                            <InputLabel htmlFor="destinationType">Destination Type: </InputLabel>
+                            <Select margin="dense" className="destination-type" label="destinationType" name="destinationType" onChange={(e: SelectChangeEvent<string>) => {
+                                setDestinationType(e.target.value);
+                            }}>
+                                <MenuItem value="hiking-trail">Hiking Trail</MenuItem>
+                                <MenuItem value="seaside">Seaside</MenuItem>
+                                <MenuItem value="park">Park</MenuItem>
+                            </Select>
                             {
-                                data
-                                    ?
-                                    data.map(r => <MenuItem value={r.id}>{r.name}</MenuItem>)
-                                    :
-                                    null
+                                toggleType(destinationType)
                             }
-                        </Select>
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel htmlFor="description">Description: </InputLabel>
-                        <Input name="description" />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel htmlFor="imageUrl">ImageUrl: </InputLabel>
-                        <Input name="imageUrl" />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel htmlFor="destinationType">Destination Type: </InputLabel>
-                        <Select label="destinationType" name="destinationType" onChange={(e: SelectChangeEvent<string>) => {
-                            setDestinationType(e.target.value);
-                        }}>
-                            <MenuItem value="hiking-trail">Hiking Trail</MenuItem>
-                            <MenuItem value="seaside">Seaside</MenuItem>
-                            <MenuItem value="park">Park</MenuItem>
-                        </Select>
-                        {
-                            toggleType(destinationType)
-                        }
-                    </FormControl>
-                    <Button type="submit" variant="contained">Create</Button>
-                </form>
-            </FormGroup>
+                        </FormControl>
+                    </Grid>
+                    <Button type="submit" variant="contained" className="submit-btn">Create</Button>
+                </Grid>
+            </form>
 
-        </Box>
+
+
+        </Box >
     );
 }
 
