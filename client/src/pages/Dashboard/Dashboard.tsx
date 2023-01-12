@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import DestinationCard from "../DestinationCard/DestinationCard";
-import DashboardInterface from "../../interfaces/DashboardInterface";
 import { useQuery } from "react-query";
 import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationInterface from "../../interfaces/DestinationInterface";
@@ -19,13 +18,13 @@ const Dashboard: FC = () => {
     const getDestinations = async () => {
         
         if (destinationType) {
-            const response = await axiosLocalInstance.get(`destinations/${destinationType}/page/${page}`);
+            const response = await axiosLocalInstance.get(`destinations/${destinationType}/${page}`);
 
             const data: DestinationInterface[] = response.data;
             return data;
         }
         else {
-            const response = await axiosLocalInstance.get(`destinations/destination/${page}`);
+            const response = await axiosLocalInstance.get(`destinations/all/${page}`);
 
             const data: DestinationInterface[] = response.data;
             return data;
