@@ -20,12 +20,6 @@ const Park: FC<FuncProp> = (prop) => {
             >
                 <FormControlLabel value="true" control={<Radio />} label="Yes" />
                 <FormControlLabel value="false" control={<Radio />} label="No" />
-                <FormControlLabel
-                    value="disabled"
-                    disabled
-                    control={<Radio />}
-                    label="other"
-                />
             </RadioGroup>
                 <FormLabel aria-labelledby="isDogFriendly">Are dogs allowed in the park?</FormLabel>
             <RadioGroup
@@ -39,12 +33,6 @@ const Park: FC<FuncProp> = (prop) => {
             >
                 <FormControlLabel value="yes" control={<Radio />} label="Yes" />
                 <FormControlLabel value="no" control={<Radio />} label="No" />
-                <FormControlLabel
-                    value="disabled"
-                    disabled
-                    control={<Radio />}
-                    label="other"
-                />
             </RadioGroup>
         </Box>
     );
