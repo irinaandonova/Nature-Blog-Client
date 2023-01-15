@@ -11,6 +11,7 @@ import { CircularProgress, FormControl, FormLabel, InputLabel, Input, Box, Selec
 import { useNavigate } from "react-router-dom";
 import CreateDestinationInterface from "../../interfaces/CreateDestinationInterface";
 import './style.css';
+
 const CreateDestination = () => {
     const initialState = { duration: undefined, difficulty: undefined, isGuarded: undefined, offersUmbrella: undefined, isDogFriendly: undefined, hasPlayground: undefined }
     const [destinationType, setDestinationType] = useState<string>('');
@@ -18,9 +19,6 @@ const CreateDestination = () => {
     const [info, setInfo] = useState<CreateDestinationInterface>(initialState);
     const navigate = useNavigate();
 
-    const addInfo = (info: CreateDestinationInterface) => {
-        setInfo(info)
-    }
     const toggleType = (type: string) => {
         if (type == 'hiking-trail')
             return <HikingTrail addInfo={addInfo} />
@@ -31,6 +29,11 @@ const CreateDestination = () => {
         else
             return null;
     }
+
+    const addInfo = (info: CreateDestinationInterface) => {
+        setInfo(info)
+    }
+    
     const getRegions = async () => {
         const regions = await axiosLocalInstance.get('region');
         const data: RegionInterface[] = regions.data;
@@ -113,7 +116,7 @@ const CreateDestination = () => {
             }}>
                 <Grid container direction="column" className="container">
                     <Grid item>
-                        <TextField label="Destination name" margin="normal" type="text" inputProps={{ minLength: 2, maxLength: 100 }} />
+                        <TextField label="Destination Name" name="name" margin="normal" type="text" inputProps={{ minLength: 2, maxLength: 100 }} />
                     </Grid>
                     <Grid item>
                         <FormControl margin="normal">
@@ -136,11 +139,11 @@ const CreateDestination = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <TextField type="text" label="Description" margin="normal" inputProps={{ minLength: 2, maxLength: 960,  }} />
+                        <TextField type="text" sx={{ width: 222 }} multiline={true} label="Description" name="description" margin="normal" inputProps={{ minLength: 2, maxLength: 960, }} />
                     </Grid>
                     <Grid item>
                         <FormControl>
-                            <TextField type="text" label="Image path" margin="normal" inputProps={{ minLength: 2, maxLength: 960 }} />
+                            <TextField  type="text" label="Image path" name="imageUrl" margin="normal" inputProps={{ minLength: 2, maxLength: 960 }} />
                         </FormControl>
                     </Grid>
                     <Grid item>

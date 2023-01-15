@@ -5,6 +5,7 @@ import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationInterface from "../../interfaces/DestinationInterface";
 import { Box, CircularProgress, Pagination } from "@mui/material";
 import { useParams } from "react-router-dom";
+import './dashboard.css';
 
 const Dashboard: FC = () => {
     const { destinationType } = useParams();
@@ -13,10 +14,10 @@ const Dashboard: FC = () => {
 
     useEffect(() => {
         getPageCount()
-    },[]);
+    }, []);
 
     const getDestinations = async () => {
-        
+
         if (destinationType) {
             const response = await axiosLocalInstance.get(`destinations/${destinationType}/${page}`);
 
@@ -24,6 +25,7 @@ const Dashboard: FC = () => {
             return data;
         }
         else {
+
             const response = await axiosLocalInstance.get(`destinations/all/${page}`);
 
             const data: DestinationInterface[] = response.data;
@@ -31,16 +33,16 @@ const Dashboard: FC = () => {
         }
 
     }
-    const getPageCount = async() => {
+    const getPageCount = async () => {
         const response = await axiosLocalInstance.get(`destinations/count/all`);
         const data: number = response.data;
-        
+
         setPageCount(data);
     }
-    const { data, isError, isLoading, isFetching } = useQuery(['allDestinationsArray', destinationType, page], getDestinations, { retry: false})
-
+    const { data, isError, isLoading, isFetching } = useQuery(['allDestinationsArray', destinationType, page], getDestinations, { retry: false })
+    
     return (
-        <Box>
+        <Box className="box">
             {(isLoading || isFetching) ? <CircularProgress /> : null}
             {isError ? <p>Something went wrong</p> : null}
             {
