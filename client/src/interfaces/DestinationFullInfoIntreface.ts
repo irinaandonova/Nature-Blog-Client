@@ -5,12 +5,13 @@ interface DestinationFullInfoInterface {
     description: string,
     imageUrl: string,
     regionId: number,
-    duration?: number,
+    hikingDuration?: number,
     difficulty?: number,
     isDogFriendly?: boolean, 
     hasPlayground?: boolean, 
     isGuarded?: boolean, 
-    offersUmbrella?: boolean 
+    offersUmbrella?: boolean,
+    type: string
 }
 
 export default DestinationFullInfoInterface;
