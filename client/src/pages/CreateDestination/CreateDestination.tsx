@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect, FC } from "react";
 import { AuthContext } from "../../auth/authContext";
 import { Button, FormGroup, FormGroupProps, Grid, TextField } from "@mui/material";
-import HikingTrail from "../../components/HikingTrail";
-import Seaside from "../../components/Seaside";
-import Park from "../../components/Park";
+import HikingTrail from "../../components/CreateDestination/HikingTrail";
+import Seaside from "../../components/CreateDestination/Seaside";
+import Park from "../../components/CreateDestination/Park";
 import RegionInterface from "../../interfaces/RegionInterface";
 import { useQuery } from "react-query";
 import axiosLocalInstance from "../../config/axiosConfig";
