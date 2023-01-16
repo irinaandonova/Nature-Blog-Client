@@ -1,6 +1,6 @@
 import { Box, RadioGroup, FormLabel, FormControlLabel, Radio } from '@mui/material';
 import { FC, useState } from 'react';
-import FuncProp from '../interfaces/FuncPropInterface';
+import FuncProp from '../../interfaces/FuncPropInterface';
 
 const Park: FC<FuncProp> = (prop) => {
     const [hasPlayground, setHasPlayground] = useState<boolean>(true);
@@ -39,6 +39,3 @@ const Park: FC<FuncProp> = (prop) => {
 }
 
 export default Park;
-/* <label className="category-label" htmlFor="isDogFriendly">Are dogs allowed in this park?</label>
-            <input name="isDogFriendly" value="Yes" type="radio"/>
-            <input name="isDogFriendly" value="No" type="radio"/>*/

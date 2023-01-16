@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import FuncProp from "../interfaces/FuncPropInterface";
+import FuncProp from "../../interfaces/FuncPropInterface";
 import { Box, RadioGroup, FormLabel, FormControlLabel, Radio } from '@mui/material';
 
 const Seaside: FC<FuncProp> = (prop) => {

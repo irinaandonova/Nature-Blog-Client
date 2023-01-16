@@ -1,5 +1,5 @@
 import { useState, FC } from 'react';
-import FuncProp from '../interfaces/FuncPropInterface';
+import FuncProp from '../../interfaces/FuncPropInterface';
 
 const HikingTrail: FC<FuncProp> = (prop) => {
     const [duration, setDuration] = useState<number>(0);
