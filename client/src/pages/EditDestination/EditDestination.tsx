@@ -2,7 +2,6 @@ import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, Button, Cir
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-
 import RegionInterface from "../../interfaces/RegionInterface";
 import axiosLocalInstance from "../../config/axiosConfig";
 import DestinationFullInfoInterface from "../../interfaces/DestinationFullInfoIntreface";
@@ -49,20 +48,12 @@ const EditDestination = () => {
         return data;
     }
 
-    const manageRegionOptions = (region: RegionInterface) => {
-        if (region.id === destinationData?.regionId)
-            return <MenuItem value={region.id} selected>{region.name}</MenuItem>;
-
-        return <MenuItem value={region.id}>{region.name}</MenuItem>;
-    }
     const editDestinationHandler = async (name: string,
         region: number,
         description: string,
         imageUrl: string,
     ) => {
-        if (destinationData?.type == 'hikingTrail') {
-        console.log(user.id);
-            
+        if (destinationData?.type === 'hikingTrail') {
             const response = await axiosLocalInstance.put('destinations/hiking-trail/edit', {
                 id: destinationData.id,
                 name,
@@ -73,8 +64,8 @@ const EditDestination = () => {
                 duration: info.duration,
                 difficulty: info.difficulty,
             });
-            console.log(response);
-            if (response.status == 200)
+
+            if (response.status === 200)
                 navigate('/');
         }
         else if (destinationData?.type === 'park') {
@@ -104,7 +95,7 @@ const EditDestination = () => {
                 isGuarded: info.isGuarded
             });
 
-            if (response.status == 200)
+            if (response.status === 200)
                 navigate('/');
         }
     }
@@ -148,11 +139,12 @@ const EditDestination = () => {
                                     label="region"
                                     className="region-select"
                                     margin="dense"
+                                    value={destinationData?.regionId}
                                 >
                                     {
                                         regionData
                                             ?
-                                            regionData.map(r => manageRegionOptions(r))
+                                            regionData.map(r => <MenuItem value={r.id}>{r.name}</MenuItem>)
                                             :
                                             null
                                     }
