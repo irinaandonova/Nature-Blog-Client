@@ -79,6 +79,7 @@ const EditDestination = () => {
         }
         else if (destinationData?.type === 'park') {
             const response = await axiosLocalInstance.put('destinations/park/edit', {
+                id: destinationData.id,
                 name,
                 regionId: region,
                 userId: user.id,
