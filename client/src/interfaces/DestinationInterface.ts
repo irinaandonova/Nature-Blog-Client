@@ -5,7 +5,8 @@ interface DestinationInterface {
     description: string,
     imageUrl: string,
     regionId: number,
-    type: string
+    type: string,
+    ratingScore?: number
 }
 
 export default DestinationInterface;

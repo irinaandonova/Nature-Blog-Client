@@ -1,3 +1,5 @@
+import UserInterface from "./UserInterface";
+
 interface DestinationFullInfoInterface {
     id: number,
     creatorId: number,
@@ -11,7 +13,9 @@ interface DestinationFullInfoInterface {
     hasPlayground?: boolean, 
     isGuarded?: boolean, 
     offersUmbrella?: boolean,
-    type: string
+    type: string,
+    ratingScore: number,
+    visitors: UserInterface[]
 }
 
 export default DestinationFullInfoInterface;
