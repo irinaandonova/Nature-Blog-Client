@@ -33,7 +33,7 @@ const CreateDestination = () => {
     const addInfo = (info: CreateDestinationInterface) => {
         setInfo(info)
     }
-    
+
     const getRegions = async () => {
         const regions = await axiosLocalInstance.get('region');
         const data: RegionInterface[] = regions.data;
@@ -47,7 +47,6 @@ const CreateDestination = () => {
         description: string,
         imageUrl: string,
         destinationType: string) => {
-
         if (destinationType == 'hiking-trail') {
             const response = await axiosLocalInstance.post('destinations/hiking-trail', {
                 name,
@@ -143,7 +142,7 @@ const CreateDestination = () => {
                     </Grid>
                     <Grid item>
                         <FormControl>
-                            <TextField  type="text" label="Image path" name="imageUrl" margin="normal" inputProps={{ minLength: 2, maxLength: 960 }} />
+                            <TextField type="text" label="Image path" name="imageUrl" margin="normal" inputProps={{ minLength: 2, maxLength: 960 }} />
                         </FormControl>
                     </Grid>
                     <Grid item>
