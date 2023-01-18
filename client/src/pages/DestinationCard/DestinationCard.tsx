@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import './destinationCard.css';
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardMedia, Typography, CircularProgress } from "@mui/material";
+import RatingComponent from "../../components/Rating/Rating";
 
 interface DestinationProps {
     destinationInfo: DestinationInterface
@@ -13,7 +14,7 @@ interface DestinationProps {
 
 const DestinationCard: FC<DestinationProps> = ({ destinationInfo }) => {
     const navigate = useNavigate();
-    
+
     const getRegion = async () => {
         const id: number = destinationInfo.regionId;
         const response = await axiosLocalInstance.get(`region/${id}`);
@@ -43,6 +44,7 @@ const DestinationCard: FC<DestinationProps> = ({ destinationInfo }) => {
                 <Typography gutterBottom variant="body2" component="div">
                     Region: {data?.name}
                 </Typography>
+                {<RatingComponent ratingScore={destinationInfo.ratingScore} readonly={true}/>}
             </CardContent>
         </Card>
     );
