@@ -10,16 +10,18 @@ import AddComment from "../../components/Comments/AddCommet";
 import CommentPropInterface from "../../interfaces/CommentInterface";
 import Comment from "../../components/Comments/Comment";
 import CommentInterface from "../../interfaces/CommentInterface";
+import RatingComponent from "../../components/Rating/Rating";
+import Visitors from "../../components/Visitors/Visitors";
 
 const Details = () => {
-    const { id, type } = useParams();
+    const { id } = useParams();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const getDestinationInfo = async () => {
         const response = await axiosLocalInstance.get(`destinations/info/${id}`);
         const data: DestinationFullInfoInterface = response.data;
-        
+
         return data;
     }
 
@@ -29,15 +31,15 @@ const Details = () => {
         if (response.status === 200)
             navigate('/');
     }
-    
-    const getComments = async() => {
+
+    const getComments = async () => {
         const response = await axiosLocalInstance.get(`comments/${id}`);
         const data: CommentInterface[] = response.data;
-        
+
         return data;
     }
     const { data, isError, isFetching, isLoading } = useQuery(['getDestinationFullInfoKey'], getDestinationInfo);
-    const {data: commentData, isError: commentError, isFetching: commentFetching, isLoading: commentLoading} = useQuery(['getAllComments'], getComments)
+    const { data: commentData, isError: commentError, isFetching: commentFetching, isLoading: commentLoading } = useQuery(['getAllComments'], getComments)
 
     return (
         <Card sx={{ maxWidth: 345 }} className="container">
@@ -107,17 +109,19 @@ const Details = () => {
                         :
                         null
                 }
+                <RatingComponent ratingScore={data?.ratingScore} readonly={false}/>
                 <AddComment />
                 {
-                commentData 
-                ?
-                commentData.map(c => <Comment comment={c} key={c.id} />)
-                :
-                null
-            }
+                    commentData
+                        ?
+                        commentData.map(c => <Comment comment={c} key={c.id} />)
+                        :
+                        null
+                }
+                <Visitors destinationId={data?.id} creatorId={data?.creatorId} visitors={data?.visitors}/>
             </CardContent>
         </Card>
-        
+
     );
 }
 
